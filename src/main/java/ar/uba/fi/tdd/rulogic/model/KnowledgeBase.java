@@ -1,5 +1,7 @@
 package ar.uba.fi.tdd.rulogic.model;
 
+import ar.uba.fi.tdd.rulogic.model.exception.BaseException;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,18 +21,14 @@ public class KnowledgeBase {
 		this.base = new Base();
 	}
 
-	public void build(String filePath) throws NoSuchFileException {
+	public void build(String filePath) throws NoSuchFileException, BaseException {
 
 		List<String> entries = new BufferedReader(new InputStreamReader(getResource(filePath)))
 			.lines().collect(toCollection(ArrayList::new));
 		base.build(entries);
 	}
 
-	public void buildFromList(List<String> entries) {
-		base.build(entries);
-	}
-
-	public boolean answer(String query) {
+	public boolean answer(String query) throws BaseException {
 
 		Atom prop = new Atom();
 		prop.build(query);

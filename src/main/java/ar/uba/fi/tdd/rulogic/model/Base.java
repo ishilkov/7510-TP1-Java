@@ -1,5 +1,7 @@
 package ar.uba.fi.tdd.rulogic.model;
 
+import ar.uba.fi.tdd.rulogic.model.exception.BaseException;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -24,7 +26,7 @@ public class Base {
         facts = new ArrayList<Atom>();
     }
 
-    public void build(List<String> entries) {
+    public void build(List<String> entries) throws BaseException {
         for (String entry : entries) {
             Matcher m = rulePattern.matcher(entry);
             if (m.matches()) {

@@ -1,5 +1,7 @@
 package ar.uba.fi.tdd.rulogic.model;
 
+import ar.uba.fi.tdd.rulogic.model.exception.BaseException;
+
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +20,8 @@ public class Atom {
     private Pattern argsPattern;
 
     public Atom() {
-        atomPattern = Pattern.compile(atomExp);
-        argsPattern = Pattern.compile(argsExp);
+        this.atomPattern = Pattern.compile(atomExp);
+        this.argsPattern = Pattern.compile(argsExp);
     }
 
     public Atom(String id, List<String> args) {
@@ -27,10 +29,10 @@ public class Atom {
         this.args = args;
     }
 
-    public void build(String entry) {
-        Matcher m = atomPattern.matcher(entry);
-        if (m.find() == false) {
-            //throw Exception here!
+    public void build(String entry) throws BaseException {
+        Matcher m = this.atomPattern.matcher(entry);
+        if (!m.find()) {
+            throw new BaseException("Bad database structure: " + entry);
         }
 
         this.id = m.group(1);
@@ -40,8 +42,8 @@ public class Atom {
     private List<String> buildArgs(String args) {
         Matcher m = argsPattern.matcher(args);
 
-        List<String> buildArgs = new ArrayList<String>();
-        while (m.find() == true) {
+        List<String> buildArgs = new ArrayList<>();
+        while (m.find()) {
             buildArgs.add(m.group(1));
         }
 

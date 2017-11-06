@@ -1,5 +1,7 @@
 package ar.uba.fi.tdd.rulogic.model;
 
+import ar.uba.fi.tdd.rulogic.model.exception.BaseException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -27,11 +29,11 @@ public class Rule {
         condPattern = Pattern.compile(condExpr);
     }
 
-    public void build(String entry) {
+    public void build(String entry) throws BaseException {
 
         Matcher m = rulePattern.matcher(entry);
-        if (m.find() == false) {
-            //throw Exception here!
+        if (!m.find()) {
+            throw new BaseException("Bad database structure: " + entry);
         }
 
         this.proposition = this.buildProposition(m.group(1));
@@ -39,14 +41,14 @@ public class Rule {
         this.conditions = this.buildConditions(m.group(2));
     }
 
-    private Atom buildProposition(String prop) {
+    private Atom buildProposition(String prop) throws BaseException {
 
         Atom buildProp = new Atom();
         buildProp.build(prop);
         return buildProp;
     }
 
-    private List<Atom> buildConditions(String conds) {
+    private List<Atom> buildConditions(String conds) throws BaseException {
         Matcher m = condPattern.matcher(conds);
 
         List<Atom> buildConds = new ArrayList<Atom>();
